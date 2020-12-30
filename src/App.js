@@ -1,10 +1,25 @@
+import React, {setState} from 'react';
 import './App.css';
 import Post from './Post';
 
 function App() {
+	const [posts, setPosts] = setState([
+		{
+			username: 'tom',
+			caption: 'nice job',
+			imageUrl:
+				'https://i.pinimg.com/originals/7a/af/0f/7aaf0f1d48f57b7779c0fbcf103c2d0f.jpg',
+		},
+		{
+			username: 'tom',
+			caption: 'nice job',
+			imageUrl:
+				'https://i.pinimg.com/originals/7a/af/0f/7aaf0f1d48f57b7779c0fbcf103c2d0f.jpg',
+		},
+	]);
+
 	return (
 		<div className='App'>
-			{/*Header */}
 			<div className='app__header'>
 				<img
 					className='app__headerImage'
@@ -12,16 +27,16 @@ function App() {
 					alt=''
 				/>
 			</div>
-
-			{/*post */}
-			<Post />
-			<Post />
-			<Post />
-			<Post />
-
-			{/* Post */}
+			{posts.map((post) => (
+				<Post
+					username={post.username}
+					caption={post.caption}
+					imageUrl={post.imageUrl}
+				></Post>
+			))}
 		</div>
 	);
 }
 
 export default App;
+//57:41
