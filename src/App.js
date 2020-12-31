@@ -1,22 +1,17 @@
-import React, {setState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './App.css';
 import Post from './Post';
+import {db} from './firebase';
 
 function App() {
-	const [posts, setPosts] = setState([
-		{
-			username: 'tom',
-			caption: 'nice job',
-			imageUrl:
-				'https://i.pinimg.com/originals/7a/af/0f/7aaf0f1d48f57b7779c0fbcf103c2d0f.jpg',
-		},
-		{
-			username: 'tom',
-			caption: 'nice job',
-			imageUrl:
-				'https://i.pinimg.com/originals/7a/af/0f/7aaf0f1d48f57b7779c0fbcf103c2d0f.jpg',
-		},
-	]);
+	const [posts, setPosts] = useState([]);
+
+	//useEffect() -> runs piece of code based on specific condition
+	useEffect(() => {
+		db.collection('posts').onSnapshot((snapshot) => {
+			setPosts(snapshot.docs.map((doc) => doc.data())); //keeps track of changes to db.
+		});
+	}, []);
 
 	return (
 		<div className='App'>
@@ -39,4 +34,4 @@ function App() {
 }
 
 export default App;
-//57:41
+//1:17:45
