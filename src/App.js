@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 function App() {
 	const classes = useStyles();
 	const [modalStyle] = React.useState(getModalStyle);
+	const [openSignIn, setOpenSignIn] = useState(false);
 	const [posts, setPosts] = useState([]);
 	const [open, setOpen] = useState(false);
 	const [username, setUsername] = useState('');
@@ -76,6 +77,18 @@ function App() {
 				});
 			})
 			.catch((error) => alert(error.message));
+
+		setOpen(false);
+	};
+
+	const signIn = (event) => {
+		event.preventDefault();
+
+		auth
+			.signInWithEmailAndPassword(email, password)
+			.catch((error) => alert(error.message));
+
+		setOpenSignIn(false);
 	};
 
 	return (
@@ -116,6 +129,37 @@ function App() {
 				</div>
 			</Modal>
 
+			{/* new modal */}
+
+			<Modal open={openSignIn} onClose={() => setOpenSignIn(false)}>
+				<div style={modalStyle} className={classes.paper}>
+					<form className='app__signup'>
+						<img
+							className='app__headerImage'
+							src='https://hubpng.com/download/W2ggu4BM7WFdPZaFwCkc8gH7ES5Adp6J1EVPvw8RFgb7yB8y9LYAb6B8mOkQ4SeOrzwimIxIC0aWrlmlzHkj3sfh0yhOJYa8DVdpw4bgDFGFXwvj8Jg3dtPPinexz44sc5eDzwIqmvkwR1Piq09tA2oxQ64OPgORmcw9GUqgJtFWHMkXu6FK18oyxX8u9NG5amRIziVP/small'
+							alt=''
+						/>
+
+						<Input
+							placeholder='email'
+							type='text'
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+						/>
+
+						<Input
+							placeholder='password'
+							type='text'
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+						/>
+						<Button type='submit' onClick={signIn}>
+							Sign In
+						</Button>
+					</form>
+				</div>
+			</Modal>
+
 			<div className='app__header'>
 				<img
 					className='app__headerImage'
@@ -123,7 +167,14 @@ function App() {
 					alt=''
 				/>
 			</div>
-			<Button onClick={() => setOpen(true)}>SignUP</Button>
+			{user ? (
+				<Button onClick={() => auth.signOut()}>logOUT</Button>
+			) : (
+				<div className='app__loginContainer'>
+					<Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+					<Button onClick={() => setOpen(true)}>Sign UP</Button>
+				</div>
+			)}
 
 			{/* the key={id} prevents refendering of whole list */}
 			{posts.map(({id, post}) => (
