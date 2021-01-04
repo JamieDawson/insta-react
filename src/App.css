@@ -23,3 +23,7 @@
 .app__headerImage {
 	max-width: 100px;
 }
+
+.app__posts {
+	padding: 20px;
+}

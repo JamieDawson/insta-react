@@ -6,6 +6,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import {Button, Input} from '@material-ui/core';
 import ImageUpload from './ImageUpload';
+import InstagramEmbed from 'react-instagram-embed';
 
 function getModalStyle() {
 	const top = 50;
@@ -179,15 +180,30 @@ function App() {
 				)}
 			</div>
 
-			{/* the key={id} prevents refendering of whole list */}
-			{posts.map(({id, post}) => (
-				<Post
-					key={id}
-					username={post.username}
-					caption={post.caption}
-					imageUrl={post.imageUrl}
-				></Post>
-			))}
+			<div className='app__posts'>
+				{/* the key={id} prevents refendering of whole list */}
+				{posts.map(({id, post}) => (
+					<Post
+						key={id}
+						username={post.username}
+						caption={post.caption}
+						imageUrl={post.imageUrl}
+					></Post>
+				))}
+				<InstagramEmbed
+					url='https://instagr.am/p/Zw9o4/'
+					// clientAccessToken='123|456'
+					maxWidth={320}
+					hideCaption={false}
+					containerTagName='div'
+					protocol=''
+					injectScript
+					onLoading={() => {}}
+					onSuccess={() => {}}
+					onAfterRender={() => {}}
+					onFailure={() => {}}
+				/>
+			</div>
 
 			{/* user? prevents it from breaking */}
 			{user?.displayName ? (
