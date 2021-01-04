@@ -96,13 +96,6 @@ function App() {
 
 	return (
 		<div className='App'>
-			{/* user? prevents it from breaking */}
-			{user?.displayName ? (
-				<ImageUpload username={user.displayName} />
-			) : (
-				<h3>You need to login to upload!</h3>
-			)}
-
 			<Modal open={open} onClose={() => setOpen(false)}>
 				<div style={modalStyle} className={classes.paper}>
 					<form className='app__signup'>
@@ -176,15 +169,15 @@ function App() {
 					src='https://hubpng.com/download/W2ggu4BM7WFdPZaFwCkc8gH7ES5Adp6J1EVPvw8RFgb7yB8y9LYAb6B8mOkQ4SeOrzwimIxIC0aWrlmlzHkj3sfh0yhOJYa8DVdpw4bgDFGFXwvj8Jg3dtPPinexz44sc5eDzwIqmvkwR1Piq09tA2oxQ64OPgORmcw9GUqgJtFWHMkXu6FK18oyxX8u9NG5amRIziVP/small'
 					alt=''
 				/>
+				{user ? (
+					<Button onClick={() => auth.signOut()}>logOUT</Button>
+				) : (
+					<div className='app__loginContainer'>
+						<Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+						<Button onClick={() => setOpen(true)}>Sign UP</Button>
+					</div>
+				)}
 			</div>
-			{user ? (
-				<Button onClick={() => auth.signOut()}>logOUT</Button>
-			) : (
-				<div className='app__loginContainer'>
-					<Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
-					<Button onClick={() => setOpen(true)}>Sign UP</Button>
-				</div>
-			)}
 
 			{/* the key={id} prevents refendering of whole list */}
 			{posts.map(({id, post}) => (
@@ -195,6 +188,13 @@ function App() {
 					imageUrl={post.imageUrl}
 				></Post>
 			))}
+
+			{/* user? prevents it from breaking */}
+			{user?.displayName ? (
+				<ImageUpload username={user.displayName} />
+			) : (
+				<h3>You need to login to upload!</h3>
+			)}
 		</div>
 	);
 }
