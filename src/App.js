@@ -190,19 +190,6 @@ function App() {
 						imageUrl={post.imageUrl}
 					></Post>
 				))}
-				<InstagramEmbed
-					url='https://instagr.am/p/Zw9o4/'
-					// clientAccessToken='123|456'
-					maxWidth={320}
-					hideCaption={false}
-					containerTagName='div'
-					protocol=''
-					injectScript
-					onLoading={() => {}}
-					onSuccess={() => {}}
-					onAfterRender={() => {}}
-					onFailure={() => {}}
-				/>
 			</div>
 
 			{/* user? prevents it from breaking */}
@@ -216,4 +203,4 @@ function App() {
 }
 
 export default App;
-//1:58:30
+//3:00:40
