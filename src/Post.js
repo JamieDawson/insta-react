@@ -2,8 +2,10 @@ import React, {useState, useEffect} from 'react';
 import {db} from './firebase';
 import './Post.css';
 import Avatar from '@material-ui/core/Avatar';
+import firebase from 'firebase';
 
-function Post({postId, username, caption, imageUrl}) {
+//username = person who wrote post. user = person who signed in.
+function Post({postId, username, user, caption, imageUrl}) {
 	const [comments, setComments] = useState([]);
 	const [comment, setComment] = useState('');
 
@@ -14,6 +16,7 @@ function Post({postId, username, caption, imageUrl}) {
 				.collection('posts')
 				.doc(postId)
 				.collection('comments')
+				.orderBy('timestamp', 'desc')
 				.onSnapshot((snapshot) => {
 					setComments(snapshot.docs.map((doc) => doc.data()));
 				});
@@ -24,7 +27,17 @@ function Post({postId, username, caption, imageUrl}) {
 		};
 	}, [postId]);
 
-	const postComment = (event) => {};
+	const postComment = (event) => {
+		event.preventDefault();
+
+		// user = signed in user
+		db.collection('posts').doc(postId).collection('comments').add({
+			text: comment,
+			username: user.displayName,
+			timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+		});
+		setComment('');
+	};
 
 	return (
 		<div className='post'>
@@ -51,23 +64,25 @@ function Post({postId, username, caption, imageUrl}) {
 				))}
 			</div>
 
-			<form className='post__commentBox'>
-				<input
-					className='post__input'
-					type='text'
-					placeholder='add a comment'
-					value={comment}
-					onChange={(e) => setComment(e.target.value)}
-				/>
-				<button
-					className='post__button'
-					disabled={!comment}
-					type='submit'
-					onClick={postComment}
-				>
-					POST
-				</button>
-			</form>
+			{user && (
+				<form className='post__commentBox'>
+					<input
+						className='post__input'
+						type='text'
+						placeholder='add a comment'
+						value={comment}
+						onChange={(e) => setComment(e.target.value)}
+					/>
+					<button
+						className='post__button'
+						disabled={!comment}
+						type='submit'
+						onClick={postComment}
+					>
+						POST
+					</button>
+				</form>
+			)}
 		</div>
 	);
 }
